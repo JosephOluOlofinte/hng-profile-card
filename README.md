@@ -1,56 +1,130 @@
-Design of a responsive social links profile with semantic HTML5 and CSS3. No frameworks or libraries were used.
+# Profile Card Component
 
-This is a solution to the social links profile challenge on Frontend Mentor. Frontend Mentor challenges help you improve your coding skills by building realistic projects.
+A fully accessible, responsive profile card built with semantic HTML, modern CSS, and vanilla JavaScript for the HNG Internship frontend track.
 
-## Table of contents
+## Links 
+- GitHub Repo: https://github.com/JosephOluOlofinte/hng-profile-card
 
-- [Overview](#overview)
-  - [The challenge](#the-challenge)
-  - [Screenshot](#screenshot)
-  - [Links](#links)
-- [My process](#my-process)
-  - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
-- [Author](#author)
+- Live URL: https://josepholuolofinte.github.io/hng-profile-card/
 
+---
 
-## Overview
+## Features
 
-### The challenge
+- ✅ Semantic HTML5 elements
+- ✅ Fully accessible (WCAG compliant)
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Keyboard navigation support
+- ✅ Real-time clock display (milliseconds)
+- ✅ `data-testid` attributes for automated testing
+- ✅ Modern, clean UI with smooth animations
 
-Users should be able to:
+---
 
-- View the optimal layout depending on their device's screen size
-- See hover and focus states for interactive elements
+## Folder Structure
 
-### Screenshot
+```
+accessible-profile-card/
+- ├── assets/        
+--    ├── fonts/          
+---        ├──  Inter-VariableFont_slnt,wght.ttf         
+---        └──  OFL.txt         
+--    └── images/         
+--`         └── avatar-joseph-olu.png   
+- ├── css/
+--     ├── fonts.css       
+--     └── style.css        
+- ├── index.html       
+- └── README.md        
+```
 
-- Desktop view
-![](./laptop-screenshot.png)
+---
 
+## Getting Started
 
-### Links
+### Installation
 
-- Solution URL: [GitHub](https://github.com/JosephOluOlofinte/social-links-profile)
-- Live Site URL: [Social Links Profile](https://josepholuolofinte.github.io/social-links-profile/)
+1. Clone or download this repository
+2. Open `index.html` in your browser
 
-## My process
+```bash
+# Simply open the file
+open index.html
 
-### Built with
+# Or use a local server
+python -m http.server 8000
+# Then visit http://localhost:8000
+```
 
-- Semantic HTML5 markup
-- CSS3 custom properties
-- Flexbox
+---
 
-### What I learned
+## Accessibility Features
 
-Even though I've learned about CSS grid before now, I tried it out for the first time in this project. I am more of a flexbox guy, but I think grids are pretty cool too. 
+- **Semantic HTML**: Uses proper HTML5 elements (`<article>`, `<nav>`, `<section>`, etc.)
+- **Keyboard Navigation**: All interactive elements are keyboard accessible
+- **Focus Indicators**: Clear visual focus states for keyboard users
+- **Alt Text**: Descriptive alt text for images
+- **ARIA Labels**: Proper labeling where needed
+- **External Links**: Safe external links with `rel="noopener noreferrer"`
+- **Reduced Motion**: Respects `prefers-reduced-motion` setting
 
-I actually think Grid is better for certain layout situations where Flexbox may be a little bit problematic. For example, after playing around a bit with grid while building this project, I think I'd prefer display:grid to layout mobile view rather than display: flex; flex-direction: column.
+--- 
 
+### Keyboard Navigation
 
-## Author
+- `Tab` - Move to next interactive element
+- `Shift + Tab` - Move to previous interactive element
+- `Enter` - Activate links
+- All social links are fully keyboard accessible
 
-- LinkedIn - [Joseph Olu Olofinte](https://www.linkedin.com/in/joseph-olu/)
-- Frontend Mentor - [@JosephOluOlofinte](https://www.frontendmentor.io/profile/JosephOluOlofinte)
-- Twitter - [@josepholofinte](https://www.twitter.com/josepholofinte)
+---
+
+## Responsive Design
+
+### Breakpoints
+
+- **Mobile** (< 768px): Stacked vertical layout
+- **Tablet** (768px - 1023px): Horizontal layout with 2-column grids
+- **Desktop** (≥ 1024px): Full-width layout with enhanced spacing
+
+--- 
+
+### Layout Behavior
+
+- Avatar and name stack vertically on mobile
+- Content sections adapt to screen size
+- Social links wrap appropriately
+- Hobbies/dislikes display in responsive grid
+
+---
+
+## Technical Details
+
+### Time Display
+
+The current time is displayed in milliseconds and updates every second:
+
+```javascript
+function updateTime() {
+    const timeElement = document.getElementById('currentTime');
+    if (timeElement) {
+        timeElement.textContent = Date.now();
+    }
+}
+
+setInterval(updateTime, 1000);
+```
+
+---
+
+## Testing
+
+All elements include the required `data-testid` attributes for automated testing:
+
+```javascript
+// Example test queries
+document.querySelector('[data-testid="test-profile-card"]')
+document.querySelector('[data-testid="test-user-name"]')
+document.querySelector('[data-testid="test-user-time"]')
+// etc.
+```
