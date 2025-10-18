@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joseph Olofinte's Profile Card - HNG Internship</title>
+    <link rel="stylesheet" href="./css/fonts.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <article data-testid="test-profile-card" class="profile-card">
+        <div class="card-content">
+
+          <!-- Header section  -->
+            <header>
+                <figure>
+                    <img 
+                        src="./assets/images/avatar-joseph-olu.png" 
+                        alt="Profile picture of Joseph Olofinte"
+                        data-testid="test-user-avatar"
+                        class="user-avatar"
+                    >
+                </figure>
+                <div>
+                    <h2 data-testid="test-user-name" class="user-name">Joseph Olofinte</h2>
+                </div>
+            </header>
+
+            <!-- Biography -->
+            <p data-testid="test-user-bio" class="user-bio">
+                Passionate full-stack developer with a love for creating beautiful, accessible web experiences. 
+                I believe in writing clean code and building products that make a difference in people's lives. 
+                Currently participating in the HNG internship to sharpen my skills and collaborate with amazing developers.
+            </p>
+
+            <!-- Current Time -->
+            <div class="time-section">
+                <div class="time-label">Current Time (milliseconds)</div>
+                <span data-testid="test-user-time" id="currentTime"></span>
+            </div>
+
+            <!-- Social Links -->
+            <nav data-testid="test-user-social-links" aria-label="Social media links">
+                <h3>Connect With Me</h3>
+                <ul>
+                    <li>
+                        <a 
+                            href="https://twitter.com/johndoe" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            data-testid="test-user-social-twitter"
+                        >
+                        Twitter
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            href="https://github.com/johndoe" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            data-testid="test-user-social-github"
+                        >
+                       GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            href="https://linkedin.com/in/johndoe" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            data-testid="test-user-social-linkedin"
+                        >
+                          LinkedIn
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Hobbies Section -->
+            <section>
+                <h3>My Hobbies</h3>
+                <ul data-testid="test-user-hobbies">
+                    <li>Playing video games and exploring virtual worlds</li>
+                    <li>Reading tech blogs and science fiction novels</li>
+                    <li> Playing guitar and composing music</li>
+                    <li>Running and staying active outdoors</li>
+                    <li>Photography and capturing beautiful moments</li>
+                    <li>Cooking and experimenting with new recipes</li>
+                </ul>
+            </section>
+
+            <!-- Dislikes Section -->
+            <section data-testid="test-user-dislikes">
+                <h3>Things I Dislike</h3>
+                <ul>
+                    <li>Poorly structured code</li>
+                    <li>Slow internet connections</li>
+                    <li>Noisy environments when trying to focus</li>
+                    <li>Unnecessary meetings that could be emails</li>
+                </ul>
+            </section>
+        </div>
+      </atticle>
+
+    <script>
+        // Update current time in milliseconds
+        function updateTime() {
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = Date.now();
+            }
+        }
+
+        // Initial time update
+        updateTime();
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+
+        // Ensure all links are keyboard accessible and have proper ARIA
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                // Ensure focus is visible
+                link.addEventListener('focus', (e) => {
+                    e.target.style.outline = '3px solid #764ba2';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
