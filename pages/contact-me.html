@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Me - HNG Internship</title>
+    <link rel="stylesheet" href="../css/fonts.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
+    <main class="contact-card">
+      <div class="card-content">
+        <!-- Header section  -->
+        <header>
+          <figure>
+            <img
+              src="../assets/images/avatar-joseph-olu.png"
+              alt="Profile picture of Joseph Olofinte"
+              class="user-avatar" />
+          </figure>
+          <div>
+            <h2 class="user-name">Joseph Olofinte</h2>
+            <nav
+              class="main-nav"
+              role="navigation"
+              aria-label="Main navigation">
+              <ul>
+                <li><a href="/">Profile</a></li>
+                <li><a href="/pages/about-me.html">About Me</a></li>
+                <li><a href="/pages/contact-me.html">Contact Me</a></li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+
+        <!-- Page Title -->
+        <h1>Contact Me</h1>
+        <p>Have a question or want to work together? Send me a message!</p>
+
+        <div
+          data-testid="test-contact-success"
+          class="success-message"
+          id="successMessage">
+          Thank you for your message! I'll get back to you as soon as possible.
+        </div>
+
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="contactName">Full Name</label>
+            <input
+              type="text"
+              id="contactName"
+              data-testid="test-contact-name"
+              aria-describedby="nameError"
+              required />
+            <div
+              id="nameError"
+              class="error-message"
+              data-testid="test-contact-error-name"
+              role="alert"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">Email Address</label>
+            <input
+              type="email"
+              id="contactEmail"
+              data-testid="test-contact-email"
+              aria-describedby="emailError"
+              required />
+            <div
+              id="emailError"
+              class="error-message"
+              data-testid="test-contact-error-email"
+              role="alert"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactSubject">Subject</label>
+            <input
+              type="text"
+              id="contactSubject"
+              data-testid="test-contact-subject"
+              aria-describedby="subjectError"
+              required />
+            <div
+              id="subjectError"
+              class="error-message"
+              data-testid="test-contact-error-subject"
+              role="alert"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMessage">Message</label>
+            <textarea
+              id="contactMessage"
+              data-testid="test-contact-message"
+              aria-describedby="messageError"
+              required></textarea>
+            <div
+              id="messageError"
+              class="error-message"
+              data-testid="test-contact-error-message"
+              role="alert"></div>
+          </div>
+
+          <button
+            type="submit"
+            data-testid="test-contact-submit"
+            class="form-btn">
+            Send Message
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      // Contact Form Validation
+      const contactForm = document.getElementById('contactForm');
+      const nameInput = document.getElementById('contactName');
+      const emailInput = document.getElementById('contactEmail');
+      const subjectInput = document.getElementById('contactSubject');
+      const messageInput = document.getElementById('contactMessage');
+      const successMessage = document.getElementById('successMessage');
+
+      function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function showError(input, errorElement, message) {
+        input.classList.add('error');
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+      }
+
+      function clearError(input, errorElement) {
+        input.classList.remove('error');
+        errorElement.textContent = '';
+        errorElement.classList.remove('show');
+      }
+
+      function validateForm() {
+        let isValid = true;
+
+        // Clear previous success message
+        successMessage.classList.remove('show');
+
+        // Validate name
+        if (nameInput.value.trim() === '') {
+          showError(
+            nameInput,
+            document.getElementById('nameError'),
+            'Full name is required'
+          );
+          isValid = false;
+        } else {
+          clearError(nameInput, document.getElementById('nameError'));
+        }
+
+        // Validate email
+        if (emailInput.value.trim() === '') {
+          showError(
+            emailInput,
+            document.getElementById('emailError'),
+            'Email address is required'
+          );
+          isValid = false;
+        } else if (!validateEmail(emailInput.value.trim())) {
+          showError(
+            emailInput,
+            document.getElementById('emailError'),
+            'Please enter a valid email address (e.g., name@example.com)'
+          );
+          isValid = false;
+        } else {
+          clearError(emailInput, document.getElementById('emailError'));
+        }
+
+        // Validate subject
+        if (subjectInput.value.trim() === '') {
+          showError(
+            subjectInput,
+            document.getElementById('subjectError'),
+            'Subject is required'
+          );
+          isValid = false;
+        } else {
+          clearError(subjectInput, document.getElementById('subjectError'));
+        }
+
+        // Validate message
+        if (messageInput.value.trim() === '') {
+          showError(
+            messageInput,
+            document.getElementById('messageError'),
+            'Message is required'
+          );
+          isValid = false;
+        } else if (messageInput.value.trim().length < 10) {
+          showError(
+            messageInput,
+            document.getElementById('messageError'),
+            'Message must be at least 10 characters long'
+          );
+          isValid = false;
+        } else {
+          clearError(messageInput, document.getElementById('messageError'));
+        }
+
+        return isValid;
+      }
+
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (validateForm()) {
+          // Show success message
+          successMessage.classList.add('show');
+
+          // Reset form
+          contactForm.reset();
+
+          // Scroll to success message
+          successMessage.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+          });
+        }
+      });
+
+      // Real-time validation on blur
+      nameInput.addEventListener('blur', () => {
+        if (nameInput.value.trim() === '') {
+          showError(
+            nameInput,
+            document.getElementById('nameError'),
+            'Full name is required'
+          );
+        } else {
+          clearError(nameInput, document.getElementById('nameError'));
+        }
+      });
+
+      emailInput.addEventListener('blur', () => {
+        if (emailInput.value.trim() === '') {
+          showError(
+            emailInput,
+            document.getElementById('emailError'),
+            'Email address is required'
+          );
+        } else if (!validateEmail(emailInput.value.trim())) {
+          showError(
+            emailInput,
+            document.getElementById('emailError'),
+            'Please enter a valid email address (e.g., name@example.com)'
+          );
+        } else {
+          clearError(emailInput, document.getElementById('emailError'));
+        }
+      });
+
+      subjectInput.addEventListener('blur', () => {
+        if (subjectInput.value.trim() === '') {
+          showError(
+            subjectInput,
+            document.getElementById('subjectError'),
+            'Subject is required'
+          );
+        } else {
+          clearError(subjectInput, document.getElementById('subjectError'));
+        }
+      });
+
+      messageInput.addEventListener('blur', () => {
+        if (messageInput.value.trim() === '') {
+          showError(
+            messageInput,
+            document.getElementById('messageError'),
+            'Message is required'
+          );
+        } else if (messageInput.value.trim().length < 10) {
+          showError(
+            messageInput,
+            document.getElementById('messageError'),
+            'Message must be at least 10 characters long'
+          );
+        } else {
+          clearError(messageInput, document.getElementById('messageError'));
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Card - HNG Internship</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        nav.main-nav {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        nav.main-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav.main-nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav.main-nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        nav.main-nav a:focus {
+            outline: 3px solid #764ba2;
+            outline-offset: 2px;
+        }
+
+        nav.main-nav a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Container for all pages */
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Profile Card Styles */
+        article[data-testid="test-profile-card"] {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        figure {
+            margin: 0;
+        }
+
+        img[data-testid="test-user-avatar"] {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #667eea;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        h2[data-testid="test-user-name"] {
+            font-size: 2rem;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        p[data-testid="test-user-bio"] {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        .time-section {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        span[data-testid="test-user-time"] {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+            font-family: monospace;
+        }
+
+        nav[data-testid="test-user-social-links"] {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        nav[data-testid="test-user-social-links"] h3 {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        nav[data-testid="test-user-social-links"] ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav[data-testid="test-user-social-links"] a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #667eea;
+        }
+
+        nav[data-testid="test-user-social-links"] a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        nav[data-testid="test-user-social-links"] a:focus {
+            outline: 3px solid #764ba2;
+            outline-offset: 2px;
+        }
+
+        section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        section h3 {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        section ul {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        section li {
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            color: #4a5568;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease;
+        }
+
+        section li:hover {
+            transform: translateX(5px);
+        }
+
+        section[data-testid="test-user-dislikes"] li {
+            border-left-color: #fc8181;
+        }
+
+        /* Contact Page Styles */
+        .contact-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .contact-container h1 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .contact-container > p {
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error {
+            border-color: #fc8181;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            border: 2px solid #48bb78;
+            color: #22543d;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        button[data-testid="test-contact-submit"] {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button[data-testid="test-contact-submit"]:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button[data-testid="test-contact-submit"]:focus {
+            outline: 3px solid #764ba2;
+            outline-offset: 2px;
+        }
+
+        button[data-testid="test-contact-submit"]:active {
+            transform: translateY(0);
+        }
+
+        /* About Page Styles */
+        main[data-testid="test-about-page"] {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        main[data-testid="test-about-page"] h1 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+
+        main[data-testid="test-about-page"] section {
+            margin-bottom: 30px;
+        }
+
+        main[data-testid="test-about-page"] h2 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        main[data-testid="test-about-page"] p,
+        main[data-testid="test-about-page"] ul {
+            color: #4a5568;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        main[data-testid="test-about-page"] ul {
+            padding-left: 20px;
+            list-style-position: outside;
+        }
+
+        main[data-testid="test-about-page"] ul li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                text-align: left;
+                align-items: center;
+            }
+
+            h2[data-testid="test-user-name"] {
+                text-align: left;
+            }
+
+            p[data-testid="test-user-bio"] {
+                text-align: left;
+            }
+
+            .card-content {
+                padding: 40px;
+            }
+
+            section ul {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            button[data-testid="test-contact-submit"] {
+                width: auto;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            img[data-testid="test-user-avatar"] {
+                width: 180px;
+                height: 180px;
+            }
+
+            h2[data-testid="test-user-name"] {
+                font-size: 2.5rem;
+            }
+        }
+
+        *:focus {
+            outline: 3px solid #764ba2;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Navigation -->
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+        <ul>
+            <li><a href="#profile" class="nav-link active" data-page="profile">Profile</a></li>
+            <li><a href="#about" class="nav-link" data-page="about">About Me</a></li>
+            <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-container">
+        <!-- Profile Page (Stage 0) -->
+        <div id="profile-page" class="page active">
+            <article data-testid="test-profile-card">
+                <div class="card-content">
+                    <header>
+                        <figure>
+                            <img 
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" 
+                                alt="Profile picture of John Doe"
+                                data-testid="test-user-avatar"
+                            >
+                        </figure>
+                        <div>
+                            <h2 data-testid="test-user-name">John Doe</h2>
+                        </div>
+                    </header>
+
+                    <p data-testid="test-user-bio">
+                        Passionate full-stack developer with a love for creating beautiful, accessible web experiences. 
+                        I believe in writing clean code and building products that make a difference in people's lives. 
+                        Currently participating in the HNG internship to sharpen my skills and collaborate with amazing developers.
+                    </p>
+
+                    <div class="time-section">
+                        <div class="time-label">Current Time (milliseconds)</div>
+                        <span data-testid="test-user-time" id="currentTime"></span>
+                    </div>
+
+                    <nav data-testid="test-user-social-links" aria-label="Social media links">
+                        <h3>Connect With Me</h3>
+                        <ul>
+                            <li>
+                                <a 
+                                    href="https://twitter.com/johndoe" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    data-testid="test-user-social-twitter"
+                                >
+                                    🐦 Twitter
+                                </a>
+                            </li>
+                            <li>
+                                <a 
+                                    href="https://github.com/johndoe" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    data-testid="test-user-social-github"
+                                >
+                                    💻 GitHub
+                                </a>
+                            </li>
+                            <li>
+                                <a 
+                                    href="https://linkedin.com/in/johndoe" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    data-testid="test-user-social-linkedin"
+                                >
+                                    💼 LinkedIn
+                                </a>
+                            </li>
+                            <li>
+                                <a 
+                                    href="https://dribbble.com/johndoe" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    data-testid="test-user-social-dribbble"
+                                >
+                                    🎨 Dribbble
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <section>
+                        <h3>My Hobbies</h3>
+                        <ul data-testid="test-user-hobbies">
+                            <li>🎮 Playing video games and exploring virtual worlds</li>
+                            <li>📚 Reading tech blogs and science fiction novels</li>
+                            <li>🎸 Playing guitar and composing music</li>
+                            <li>🏃 Running and staying active outdoors</li>
+                            <li>📷 Photography and capturing beautiful moments</li>
+                            <li>🍳 Cooking and experimenting with new recipes</li>
+                        </ul>
+                    </section>
+
+                    <section data-testid="test-user-dislikes">
+                        <h3>Things I Dislike</h3>
+                        <ul>
+                            <li>😤 Poorly documented code</li>
+                            <li>🐌 Slow internet connections</li>
+                            <li>🔊 Noisy environments when trying to focus</li>
+                            <li>⏰ Unnecessary meetings that could be emails</li>
+                        </ul>
+                    </section>
+                </div>
+            </article>
+        </div>
+
+        <!-- About Me Page (Stage 1) -->
+        <div id="about-page" class="page">
+            <main data-testid="test-about-page">
+                <h1>About Me</h1>
+
+                <section>
+                    <h2>My Story</h2>
+                    <p data-testid="test-about-bio">
+                        I'm a passionate developer who discovered coding during my university years, and it completely transformed my perspective on problem-solving. 
+                        What started as curiosity about how websites work evolved into a genuine love for creating digital experiences that matter. 
+                        I believe technology should be accessible to everyone, which is why I prioritize clean code, semantic HTML, and inclusive design in everything I build. 
+                        When I'm not coding, you'll find me exploring new frameworks, contributing to open-source projects, or mentoring aspiring developers in my community.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>My Goals in This Program</h2>
+                    <p data-testid="test-about-goals">
+                        Through the HNG internship, I aim to level up my skills and transition from building personal projects to contributing to real-world applications. 
+                        Specifically, I want to master full-stack development patterns, learn to write more maintainable and scalable code, and understand how professional development teams collaborate effectively. 
+                        I'm also eager to receive constructive feedback from experienced developers, build projects that solve actual problems, and ultimately land a role where I can make meaningful contributions to a product that impacts users' lives. 
+                        Beyond technical skills, I hope to develop better communication habits and learn how to break down complex problems into manageable pieces.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Areas Where I'm Building Confidence</h2>
+                    <p data-testid="test-about-confidence">
+                        While I'm comfortable with frontend fundamentals, I sometimes struggle with complex state management in larger applications and knowing when to optimize versus when to ship. 
+                        Backend development, especially database design and API security, feels like uncharted territory that both excites and intimidates me. 
+                        I also need to build more confidence in my debugging skills—I tend to second-guess myself when bugs appear, rather than methodically working through them. 
+                        Additionally, I'm working on being more comfortable with not knowing everything; the impostor syndrome is real, but I'm learning to see gaps in knowledge as opportunities rather than failures. 
+                        Lastly, I want to get better at estimating how long tasks will take and managing my time more effectively under pressure.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Note to My Future Self</h2>
+                    <p data-testid="test-about-future-note">
+                        Hey future me! Remember how nervous you felt starting this journey? I hope you're reading this with a smile, knowing how far you've come. 
+                        Keep that curiosity alive—it's your superpower. Don't forget to celebrate small wins; every bug you fix, every feature you ship, every concept you finally understand is progress. 
+                        Stay humble, keep learning, and never stop asking questions. When things get tough (and they will), remember why you started: you love building things that help people. 
+                        Also, please don't forget to take breaks, drink water, and touch grass occasionally. Your health matters as much as your code. 
+                        Most importantly, help others climb the ladder behind you—you remember how much a kind word or helpful explanation meant when you were starting out.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Extra Thoughts</h2>
+                    <p data-testid="test-about-extra">
+                        The tech industry can feel overwhelming with its constant stream of new frameworks, tools, and best practices. 
+                        I've learned to focus on fundamentals rather than chasing every new trend—JavaScript is JavaScript whether it's vanilla, React, or Vue. 
+                        I'm grateful for the supportive developer community; resources like MDN, Stack Overflow, and dev.to have been invaluable learning companions. 
+                        This internship represents a significant step in my journey, and I'm committed to showing up fully, embracing challenges, and growing through discomfort. 
+                        I believe the best code is written with empathy—for users, for fellow developers, and for your future self who'll maintain it. 
+                        Here's to continuous learning, meaningful connections, and building a career I'm proud of!
+                    </p>
+                </section>
+            </main>
+        </div>
+
+        <!-- Contact Page (Stage 1) -->
+        <div id="contact-page" class="page">
+            <div class="contact-container">
+                <h1>Contact Us</h1>
+                <p>Have a question or want to work together? Send me a message!</p>
+
+                <div data-testid="test-contact-success" class="success-message" id="successMessage">
+                    Thank you for your message! I'll get back to you as soon as possible.
+                </div>
+
+                <form id="contactForm" novalidate>
+                    <div class="form-group">
+                        <label for="contactName">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="contactName" 
+                            data-testid="test-contact-name"
+                            aria-describedby="nameError"
+                            required
+                        >
+                        <div 
+                            id="nameError" 
+                            class="error-message" 
+                            data-testid="test-contact-error-name"
+                            role="alert"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="contactEmail" 
+                            data-testid="test-contact-email"
+                            aria-describedby="emailError"
+                            required
+                        >
+                        <div 
+                            id="emailError" 
+                            class="error-message" 
+                            data-testid="test-contact-error-email"
+                            role="alert"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <input 
+                            type="text" 
+                            id="contactSubject" 
+                            data-testid="test-contact-subject"
+                            aria-describedby="subjectError"
+                            required
+                        >
+                        <div 
+                            id="subjectError" 
+                            class="error-message" 
+                            data-testid="test-contact-error-subject"
+                            role="alert"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea 
+                            id="contactMessage" 
+                            data-testid="test-contact-message"
+                            aria-describedby="messageError"
+                            required
+                        ></textarea>
+                        <div 
+                            id="messageError" 
+                            class="error-message" 
+                            data-testid="test-contact-error-message"
+                            role="alert"
+                        ></div>
+                    </div>
+
+                    <button type="submit" data-testid="test-contact-submit">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update current time in milliseconds
+        function updateTime() {
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = Date.now();
+            }
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Page Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        function showPage(pageName) {
+            pages.forEach(page => page.classList.remove('active'));
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            const targetPage = document.getElementById(`${pageName}-page`);
+            const targetLink = document.querySelector(`[data-page="${pageName}"]`);
+
+            if (targetPage) targetPage.classList.add('active');
+            if (targetLink) targetLink.classList.add('active');
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageName = link.getAttribute('data-page');
+                showPage(pageName);
+                window.location.hash = pageName;
+            });
+        });
+
+        // Handle initial page load with hash
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash && ['profile', 'about', 'contact'].includes(hash)) {
+                showPage(hash);
+            }
+        });
+
+        // Contact Form Validation
+        const contactForm = document.getElementById('contactForm');
+        const nameInput = document.getElementById('contactName');
+        const emailInput = document.getElementById('contactEmail');
+        const subjectInput = document.getElementById('contactSubject');
+        const messageInput = document.getElementById('contactMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showError(input, errorElement, message) {
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        function clearError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.textContent = '';
+            errorElement.classList.remove('show');
+        }
+
+        function validateForm() {
+            let isValid = true;
+
+            // Clear previous success message
+            successMessage.classList.remove('show');
+
+            // Validate name
+            if (nameInput.value.trim() === '') {
+                showError(nameInput, document.getElementById('nameError'), 'Full name is required');
+                isValid = false;
+            } else {
+                clearError(nameInput, document.getElementById('nameError'));
+            }
+
+            // Validate email
+            if (emailInput.value.trim() === '') {
+                showError(emailInput, document.getElementById('emailError'), 'Email address is required');
+                isValid = false;
+            } else if (!validateEmail(emailInput.value.trim())) {
+                showError(emailInput, document.getElementById('emailError'), 'Please enter a valid email address (e.g., name@example.com)');
+                isValid = false;
+            } else {
+                clearError(emailInput, document.getElementById('emailError'));
+            }
+
+            // Validate subject
+            if (subjectInput.value.trim() === '') {
+                showError(subjectInput, document.getElementById('subjectError'), 'Subject is required');
+                isValid = false;
+            } else {
+                clearError(subjectInput, document.getElementById('subjectError'));
+            }
+
+            // Validate message
+            if (messageInput.value.trim() === '') {
+                showError(messageInput, document.getElementById('messageError'), 'Message is required');
+                isValid = false;
+            } else if (messageInput.value.trim().length < 10) {
+                showError(messageInput, document.getElementById('messageError'), 'Message must be at least 10 characters long');
+                isValid = false;
+            } else {
+                clearError(messageInput, document.getElementById('messageError'));
+            }
+
+            return isValid;
+        }
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (validateForm()) {
+                // Show success message
+                successMessage.classList.add('show');
+                
+                // Reset form
+                contactForm.reset();
+
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        // Real-time validation on blur
+        nameInput.addEventListener('blur', () => {
+            if (nameInput.value.trim() === '') {
+                showError(nameInput, document.getElementById('nameError'), 'Full name is required');
+            } else {
+                clearError(nameInput, document.getElementById('nameError'));
+            }
+        });
+
+        emailInput.addEventListener('blur', () => {
+            if (emailInput.value.trim() === '') {
+                showError(emailInput, document.getElementById('emailError'), 'Email address is required');
+            } else if (!validateEmail(emailInput.value.trim())) {
+                showError(emailInput, document.getElementById('emailError'), 'Please enter a valid email address (e.g., name@example.com)');
+            } else {
+                clearError(emailInput, document.getElementById('emailError'));
+            }
+        });
+
+        subjectInput.addEventListener('blur', () => {
+            if (subjectInput.value.trim() === '') {
+                showError(subjectInput, document.getElementById('subjectError'), 'Subject is required');
+            } else {
+                clearError(subjectInput, document.getElementById('subjectError'));
+            }
+        });
+
+        messageInput.addEventListener('blur', () => {
+            if (messageInput.value.trim() === '') {
+                showError(messageInput, document.getElementById('messageError'), 'Message is required');
+            } else if (messageInput.value.trim().length < 10) {
+                showError(messageInput, document.getElementById('messageError'), 'Message must be at least 10 characters long');
+            } else {
+                clearError(messageInput, document.getElementById('messageError'));
+            }
+        });
+    </script>
+</body>
+</html>
