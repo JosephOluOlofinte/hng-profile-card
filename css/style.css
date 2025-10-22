@@ -127,7 +127,7 @@ figure {
   border-radius: 10px;
 }
 
-.socials h3 {
+.socials h2 {
   font-size: 1.2rem;
   color: #2d3748;
   margin-bottom: 15px;
@@ -175,7 +175,7 @@ section {
   border-radius: 10px;
 }
 
-section h3 {
+section h2 {
   font-size: 1.2rem;
   color: #2d3748;
   margin-bottom: 15px;
@@ -250,7 +250,7 @@ section li:hover {
 }
 
 /* About Page Styles */
-.about-card h1 {
+.about-card h2 {
   font-size: 2.5rem;
   color: #2d3748;
   margin-bottom: 30px;
@@ -275,7 +275,7 @@ section li:hover {
 
 /* Contact Page Styles */
 
-.contact-card h1 {
+.contact-card h2 {
   font-size: 2.5rem;
   color: #2d3748;
   line-height: 0.5;
